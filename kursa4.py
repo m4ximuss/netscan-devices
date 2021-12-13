@@ -4,13 +4,13 @@ import threading
 import socket
 from datetime import datetime
 
-def getMyIp():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #Создаем сокет (UDP)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1) # Настраиваем сокет на BROADCAST вещание.
+def get_my_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     s.connect(('<broadcast>', 0))
     return s.getsockname()[0]
 
-def scan_Ip(ip):
+def scan_ip(ip):
     addr = net + str(ip)
     comm = ping_com + addr
     response = os.popen(comm)
@@ -20,7 +20,7 @@ def scan_Ip(ip):
             print(addr, "--> Ping Ok")
             break
 
-net = getMyIp()
+net = get_my_ip()
 print('You IP :',net)
 net_split = net.split('.')
 a = '.'
@@ -40,7 +40,7 @@ print("Scanning in Progress:")
 for ip in range(start_point, end_point):
     if ip == int(net_split[3]):
        continue
-    potoc = threading.Thread(target=scan_Ip, args=[ip])
+    potoc = threading.Thread(target=scan_ip, args=[ip])
     potoc.start()
 
 potoc.join()
@@ -48,3 +48,15 @@ t2 = datetime.now()
 total = t2 - t1
 
 print("Scanning completed in: ", total)
+import sqlite3
+
+con = sqlite3.connect('new.db')
+cur = con.cursor()
+
+cur.execute('CREATE TABLE IF NOT EXISTS addresses(ip INTEGER)')
+cur.executive('INSERT INTO addresses(ip) VALUES addr')
+
+con.commit()
+
+cur.close()
+con.close()
