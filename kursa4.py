@@ -21,7 +21,7 @@ def scan_ip(ip):
             break
 
 net = get_my_ip()
-print('You IP :',net)
+print('Your IP :',net)
 net_split = net.split('.')
 a = '.'
 net = net_split[0] + a + net_split[1] + a + net_split[2] + a
@@ -47,14 +47,28 @@ potoc.join()
 t2 = datetime.now()
 total = t2 - t1
 
+
 print("Scanning completed in: ", total)
+
+a=[]
+addr = net + str(ip)
+comm = ping_com + addr
+response = os.popen(comm)
+data = response.readlines()
+for line in data:
+    if 'TTL' in line:
+        a.append(addr)
+        print(addr, "--> Ping Ok")
+        break
+print (a)
+
 import sqlite3
 
 con = sqlite3.connect('new.db')
 cur = con.cursor()
 
 cur.execute('CREATE TABLE IF NOT EXISTS addresses(ip INTEGER)')
-cur.executive('INSERT INTO addresses(ip) VALUES addr')
+cur.executive('INSERT INTO addresses(ip) VALUES a')
 
 con.commit()
 
