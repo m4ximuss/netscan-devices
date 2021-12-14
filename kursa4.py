@@ -1,8 +1,12 @@
+
 import os
 import platform
 import threading
 import socket
 from datetime import datetime
+import sqlite3
+
+an = []
 
 def get_my_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -17,9 +21,10 @@ def scan_ip(ip):
     data = response.readlines()
     for line in data:
         if 'TTL' in line:
+            an.append(addr)
             print(addr, "--> Ping Ok")
             break
-
+print(an)
 net = get_my_ip()
 print('Your IP :',net)
 net_split = net.split('.')
@@ -50,25 +55,11 @@ total = t2 - t1
 
 print("Scanning completed in: ", total)
 
-a=[]
-addr = net + str(ip)
-comm = ping_com + addr
-response = os.popen(comm)
-data = response.readlines()
-for line in data:
-    if 'TTL' in line:
-        a.append(addr)
-        print(addr, "--> Ping Ok")
-        break
-print (a)
-
-import sqlite3
-
-con = sqlite3.connect('new.db')
+con = sql.connect('new.db')
 cur = con.cursor()
 
 cur.execute('CREATE TABLE IF NOT EXISTS addresses(ip INTEGER)')
-cur.executive('INSERT INTO addresses(ip) VALUES a')
+cur.execute('INSERT INTO addresses(ip) VALUES an')
 
 con.commit()
 
