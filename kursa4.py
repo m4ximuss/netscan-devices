@@ -53,15 +53,18 @@ t2 = datetime.now()
 total = t2 - t1
 
 
-print("Scanning completed in: ", total)
-
-con = sql.connect('new.db')
+con = sqlite3.connect('new.db')
 cur = con.cursor()
 
-cur.execute('CREATE TABLE IF NOT EXISTS addresses(ip INTEGER)')
-cur.execute('INSERT INTO addresses(ip) VALUES an')
+cur.execute('CREATE TABLE IF NOT EXISTS addresses(ip TEXT)')
+for i in range(len(an)):
+    k = an[i]
+    s = str(k)
+    cur.execute('INSERT INTO addresses(ip) VALUES  (?)', (s, ))
+print (an)
 
 con.commit()
 
 cur.close()
 con.close()
+
